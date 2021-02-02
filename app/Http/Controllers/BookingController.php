@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\BookingModel;
 
+use Dontev\Validator;
+
 class BookingController extends Controller
 {
     /**
@@ -37,16 +39,27 @@ class BookingController extends Controller
      */
     public function store(Request $request)
     {
+        $validated = $request->validate([
+          'guestFullName' => 'required|min:3',
+          'guestCard'=>'required',
+          'guestCard'=>'required',
+          'guestRoom'=> 'required',
+          'guestFrom'=> 'required',
+          'guestTo'=> 'required'
+        ]);
+
+
         $createBook = new BookingModel();
-        $createBook->guest_full_name = $request->input('guestFullName');
-        $createBook->guest_credit_card = $request->input("guestCard");
-        $createBook->room = $request->input("guestRoom");
-        $createBook->from_date = $request->input("guestFrom");
-        $createBook->to_date = $request->input("guestTo");
+        $createBook->guest_full_name = $validated['guestFullName'];
+        $createBook->guest_credit_card = $validated["guestCard"];
+        $createBook->room = $validated["guestRoom"];
+        $createBook->from_date = $validated["guestFrom"];
+        $createBook->to_date = $validated["guestTo"];
         $createBook->more_details = $request->input("guestDetails");
 
         $createBook->save();
         return view('succes');
+
 
     }
 
@@ -70,7 +83,8 @@ class BookingController extends Controller
      */
     public function edit($id)
     {
-        //
+        $dettagli = BookingModel::find($id);
+        return view('edit', compact('dettagli'));
     }
 
     /**
@@ -82,7 +96,26 @@ class BookingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      $validated = $request->validate([
+        'guestFullName' => 'required|min:3',
+        'guestCard'=>'required',
+        'guestCard'=>'required',
+        'guestRoom'=> 'required',
+        'guestFrom'=> 'required',
+        'guestTo'=> 'required'
+      ]);
+
+
+      $update_book = BookingModel::find($id);
+      $update_book->guest_full_name = $validated['guestFullName'];
+      $update_book->guest_credit_card = $validated["guestCard"];
+      $update_book->room = $validated["guestRoom"];
+      $update_book->from_date = $validated["guestFrom"];
+      $update_book->to_date = $validated["guestTo"];
+      $update_book->more_details = $request->input("guestDetails");
+
+      $update_book->save();
+      return view('succes');
     }
 
     /**

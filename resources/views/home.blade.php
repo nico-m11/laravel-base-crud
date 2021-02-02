@@ -14,6 +14,7 @@
                             <h5 class="card-title">{{ $key->guest_full_name }}</h5>
                             <h6 class="card-subtitle mb-2 text-muted">Stanza n° {{ $key->room }}</h6>
                             <a href="{{route('booking.show', $key->id)}}" class="btn btn-info">Dettagli Riservato</a>
+                            <a href="{{route('booking.edit', $key->id)}}" class="btn btn-danger">Modifica</a>
                         </div>
                     </div>
                 </div>
